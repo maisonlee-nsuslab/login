@@ -24,7 +24,6 @@ else
                 <label asp-for="UserId" class="control-label"></label>
                 <input asp-for="UserId" class="form-control" />
                 <span asp-validation-for="UserId" class="text-danger"></span>
-
             </div>
             <div class="form-group">
                 <label asp-for="UserPassword" class="control-label"></label>
@@ -34,7 +33,6 @@ else
             <div class="form-group">
                 <input type="submit" value="login" formaction="LoginScreen" class="btn btn-primary" />
             </div>
-
             <div class="form-group">
                 <input type="submit" value="changepw" formaction="idcheck" class="btn btn-primary" />
             </div>
@@ -42,7 +40,6 @@ else
         </form>
     </div>
 </div>
-
 
 <div>
     <a asp-controller="Login" asp-action="Create">new account</a>

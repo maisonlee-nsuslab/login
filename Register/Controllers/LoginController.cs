@@ -42,8 +42,7 @@ namespace Register.Controllers
                 ViewBag.UserId = login.UserId;
                 return View();
             }
-            return View();
-         
+            return View();  
         }
 
         // POST: Login/Register
@@ -86,7 +85,6 @@ namespace Register.Controllers
                     }
                 }
             }
-  
         }
 
         public IActionResult Create() {
