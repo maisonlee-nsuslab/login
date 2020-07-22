@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Register.Models.Info>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Logon";
+}
+
+<h1>User Account</h1>
+
+<div>
+    <h6>@ViewBag.userId</h6>
+    @if (ViewBag.userId != null)
+    {
+        <form method="post" asp-action="Logout">
+            <input type="submit" value="Logout" class="btn btn-primary" />
+        </form>
+    }
+</div>
+
+@if (ViewBag.userId != null)
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.userId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.userName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.userId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.userName)
+                    </td>
+                    @if (ViewBag.userId == item.userId)
+                    {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    </td>
+                    }
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.userId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.userName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.userId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.userName)
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}
