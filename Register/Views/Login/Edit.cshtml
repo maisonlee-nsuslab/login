@@ -33,7 +33,6 @@
     </div>
 </div>
 
-
 <div>
     <a asp-action="Login">Back to List</a>
 </div>
@@ -41,6 +40,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
 @if (ViewBag.nul == false)
 {
     <script type="text/javascript">
@@ -49,6 +49,7 @@
         };
     </script>
 }
+
 @if (ViewBag.exist == false)
 {
     <script type="text/javascript">
