@@ -36,6 +36,7 @@ else
             <div class="form-group">
                 <input type="submit" value="changepw" formaction="idcheck" class="btn btn-primary" />
             </div>
+
         </form>
     </div>
 </div>
@@ -48,7 +49,6 @@ else
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
         }
-
 @if (ViewBag.PwCheck == false)
 {
     <script type="text/javascript">
@@ -56,7 +56,6 @@ else
             alert("id/pw incorrect");
         };
     </script>
-
 }@if (ViewBag.nul == false)
 {
     <script type="text/javascript">
