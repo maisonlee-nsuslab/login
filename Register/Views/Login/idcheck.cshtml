@@ -6,7 +6,6 @@
 
     <h1>idcheck</h1>
 
-
 <div class="row">
     <div class="col-md-4">
         <form asp-action="idcheck">
@@ -25,7 +24,6 @@
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
-
     </div>
 </div>
 
@@ -33,6 +31,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
 @if (ViewBag.nul == false)
 {
     <script type="text/javascript">
