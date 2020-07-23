@@ -16,30 +16,32 @@ namespace Register.Controllers
     public class LoginController : Controller
     {
         public readonly InfoContext _context;
-
+        
         public LoginController( InfoContext infoContext)
         {  
             _context = infoContext;
         }
 
+       
         public async Task<IActionResult> Main()
         {                
-            var user = _context.Info.FirstOrDefault(m => m.isLogin == true);
+            var user = _context.Info.FirstOrDefault(m => m.login == true);
             if (user != null)
-            {
-                ViewBag.index = user.Id;
-                ViewBag.UserId = user.UserId;
+            { 
+                ViewBag.userId = user.userId;
                 return View(await _context.Info.ToListAsync());
             }
             return View(await _context.Info.ToListAsync());
         }
 
+
+
         public IActionResult LoginScreen()
         {
-            var login = _context.Info.FirstOrDefault(m => m.isLogin == true);
+            var login = _context.Info.FirstOrDefault(m => m.login == true);
             if (login != null)
             {
-                ViewBag.UserId = login.UserId;
+                ViewBag.userId = login.userId;
                 return View();
             }
             return View();
@@ -51,9 +53,10 @@ namespace Register.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LoginScreenAsync([Bind("UserId,UserPassword")] Info info,string submit)
-        {  
-            if (info.UserId == null || info.UserPassword == null)
+        public async Task<IActionResult> LoginScreenAsync([Bind("userId,userPassword")] Info info,string submit)
+        {
+           
+            if (info.userId == null || info.userPassword == null)
             {
                 //id pw  null
                 ViewBag.nul = false;
@@ -61,19 +64,19 @@ namespace Register.Controllers
             }
             else
             {
-                info.UserPassword = ComputeSha256Hash(info.UserPassword);
-                var temp = _context.Info.FirstOrDefault(e => e.UserId == info.UserId);
+                info.userPassword = ComputeSha256Hash(info.userPassword);
+                var temp = _context.Info.FirstOrDefault(e => e.userId == info.userId);
                 if (temp == null)
                 {
-                    ViewBag.PwCheck = false;
+                    ViewBag.pwCheck = false;
                     return View(info);
                 }
                 else
                 {
-                    if (temp.UserPassword == info.UserPassword)
+                    if (temp.userPassword == info.userPassword)
                     {
-                        var user = _context.Info.FirstOrDefault(m => m.UserId == info.UserId);
-                        user.isLogin = true;
+                        var user = _context.Info.FirstOrDefault(m => m.userId == info.userId);
+                        user.login = true;
                         _context.Info.Update(user);
                         await _context.SaveChangesAsync();
 
@@ -81,7 +84,7 @@ namespace Register.Controllers
                     }
                     else
                     {
-                        ViewBag.PwCheck = false;
+                        ViewBag.pwCheck = false;
                         return View(info);
                     }
                 }
@@ -90,33 +93,38 @@ namespace Register.Controllers
         }
 
         public IActionResult Create() {
-            var login = _context.Info.FirstOrDefault(m => m.isLogin == true);
+
+
+            var login = _context.Info.FirstOrDefault(m => m.login == true);
             if (login != null)
             {
-                ViewBag.UserId = login.UserId;
+                ViewBag.userId = login.userId;
                 return View();
             }
+
             return View();
         }
-
         // POST: Login/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,UserName,UserPassword,ConfirmPassword")] Info info)
+        public async Task<IActionResult> Create([Bind("userId,userName,userPassword,ConfirmPassword,Id")] Info info)
         {
-            if (info.UserId == null || info.UserPassword == null || info.UserName == null||info.ConfirmPassword == null)
+
+
+            if (info.userId == null || info.userPassword == null || info.userName == null||info.ConfirmPassword==null)
             {
                     //id pw name null
                     ViewBag.nul = false;
-                    return View();            
+                    return View();
+                
             }
             else
             {
-                if (info.UserPassword == info.ConfirmPassword)
+                if (info.userPassword == info.ConfirmPassword)
                 {
-                    var z = _context.Info.FirstOrDefault(m => m.UserId == info.UserId);
+                    var z = _context.Info.FirstOrDefault(m => m.userId == info.userId);
                     if (z != null)
                     {
                         //id 중복
@@ -125,24 +133,29 @@ namespace Register.Controllers
                     }
                     else
                     {                     
-                            info.UserPassword = ComputeSha256Hash(info.UserPassword);
-                            info.ConfirmPassword = ComputeSha256Hash(info.ConfirmPassword);                 
+                            info.userPassword = ComputeSha256Hash(info.userPassword);
+                            info.ConfirmPassword = ComputeSha256Hash(info.userPassword);                 
                             _context.Add(info);
                             await _context.SaveChangesAsync();
-                            return RedirectToAction(nameof(LoginScreen));                      
+                            return RedirectToAction(nameof(LoginScreen));
+                      
                     }
                 }
+
             }
             return View(info);
         }
 
+
         // GET: Infoes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
             }
+
             var info = await _context.Info.FindAsync(id);
             if (info == null)
             {
@@ -150,41 +163,52 @@ namespace Register.Controllers
             }
             return View(info);
         }
-
         // POST: Infoes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,UserName")] Info info)
-        {          
+        public async Task<IActionResult> Edit(int id, [Bind("Id,userId,userName")] Info info)
+        {
+           
             if (id != info.Id)
             {
                 return NotFound();
             }
-            if (info.UserId == null || info.UserName == null)
+            if (info.userId == null || info.userName == null)
             {       
                 ViewBag.nul = false;
                 return View(info);
             }
+            if (ModelState.IsValid)
+            {
+
                 var data = await _context.Info.FindAsync(id);
-                var ExistUser =  _context.Info.FirstOrDefault(m => m.UserId == info.UserId && m.Id != info.Id);
-                if (ExistUser != null)
+                var existUser =  _context.Info.FirstOrDefault(m => m.userId == info.userId && m.Id != info.Id);
+
+                if (existUser != null)
                 {
-                    ViewBag.ExiUser = ExistUser.UserId;
+                    ViewBag.exiUser = existUser.userId;
                     ViewBag.exist = false;
                     return View(info);
                 }
+
                else
                 {
-                    data.UserId = info.UserId;
-                    data.UserName = info.UserName;
+                    data.userId = info.userId;
+                    data.userName = info.userName;
                     _context.Update(data);
                     await _context.SaveChangesAsync();
+
                     return RedirectToAction(nameof(Main));
                 }
-        }
+            }
+            else
+            {
+                return View();
+            }
 
+        }
         public string ComputeSha256Hash(string rawData)
         {
             // Create a SHA256   
@@ -203,20 +227,21 @@ namespace Register.Controllers
             }
         }
 
+     
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            var user=_context.Info.FirstOrDefault(m => m.isLogin == true);
-            user.isLogin = false;
+            var user=_context.Info.FirstOrDefault(m => m.login == true);
+            user.login = false;
             _context.Info.Update(user);
             await _context.SaveChangesAsync();
             return RedirectToAction("LoginScreen", "Login");
         }
-
         public async Task<IActionResult> Checking(int? id)
         {
+        
             var data = await _context.Info.FindAsync(id);
-            ViewBag.UserId = data.UserId;
+            ViewBag.userId = data.userId;
             if (data == null)
             {
                 return NotFound();
@@ -227,23 +252,23 @@ namespace Register.Controllers
         // GET: Infoes/Checking/
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Checking(int id, [Bind("Id,UserPassword")] Info info)
+        public IActionResult Checking(int id, [Bind("Id,userPassword")] Info info)
         {
             if (id != info.Id)
             {
                 return NotFound();
             }
-            if (info.UserPassword == null)
+            if (info.userPassword == null)
             {
-                ViewBag.WrongPW = false;
+                ViewBag.wrongPW = false;
                 return View();
             }
             else
             { 
                     var data = _context.Info.FirstOrDefault(m => m.Id == id);
-                    ViewBag.UserId = data.UserId;
-                    info.UserPassword = ComputeSha256Hash(info.UserPassword);
-                    if (info.UserPassword == data.UserPassword)
+                    ViewBag.userId = data.userId;
+                    info.userPassword = ComputeSha256Hash(info.userPassword);
+                    if (info.userPassword == data.userPassword)
                     {
                         return RedirectToAction(nameof(ChangePW), new { id });
                     }
@@ -252,7 +277,9 @@ namespace Register.Controllers
                         ViewBag.wrongPW = false;
                         return View();
                     }
-            }       
+            }
+         
+
         }
 
         public async Task<IActionResult> ChangePW(int? id)
@@ -261,34 +288,40 @@ namespace Register.Controllers
             {
                 return NotFound();
             }
+
             var data = await _context.Info.FindAsync(id);
-            ViewBag.UserId = data.UserId;
+            ViewBag.userId = data.userId;
             if (data == null)
             {
                 return NotFound();
             }
             return View();
         }
-
         // GET: Infoes/Checking/
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePW(int id, [Bind("Id,UserPassword,ConfirmPassword")] Info info)
-        {           
+        public async Task<IActionResult> ChangePW(int id, [Bind("Id,userPassword,ConfirmPassword")] Info info)
+        {
+            
+
             if (id != info.Id)
             {
                 return NotFound();
-            }         
+            }
+          
             if (ModelState.IsValid)
             {
+
                 var data = await _context.Info.FindAsync(id);
-                if (info.Id == data.Id &&(info.UserPassword==info.ConfirmPassword))
+
+                if (info.Id == data.Id &&(info.userPassword==info.ConfirmPassword))
                 {
-                    data.UserPassword = ComputeSha256Hash(info.UserPassword);
+                    data.userPassword = ComputeSha256Hash(info.userPassword);
                     data.ConfirmPassword = ComputeSha256Hash(info.ConfirmPassword);
-                    data.isLogin = true;
+                    data.login = true;
                     _context.Update(data);
                     await _context.SaveChangesAsync();
+
                     return RedirectToAction(nameof(Main));
                 }
             }
@@ -296,9 +329,12 @@ namespace Register.Controllers
             {
                 return View();
             }
+
             return RedirectToAction(nameof(Main));
         }
-      
+
+
+        
         public IActionResult idcheck()
         { 
             return View();
@@ -308,13 +344,14 @@ namespace Register.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> idcheck([Bind("Id,UserId,UserPassword")] Info info)
-        {       
-                if(info.UserId ==null ||info.UserPassword==null)
+        public async Task<IActionResult> idcheck([Bind("Id,userId,userPassword")] Info info)
+        {
+       
+                if(info.userId ==null ||info.userPassword==null)
                 {                   
                     return View();
                 }
-                var data = _context.Info.FirstOrDefault(m => m.UserId == info.UserId);
+                var data = _context.Info.FirstOrDefault(m => m.userId == info.userId);
 
                 if (data == null  )
                 {
@@ -323,8 +360,8 @@ namespace Register.Controllers
                 }
                 else
                 {
-                    info.UserPassword = ComputeSha256Hash(info.UserPassword);
-                    if (data.UserId == info.UserId && data.UserPassword == info.UserPassword)
+                    info.userPassword = ComputeSha256Hash(info.userPassword);
+                    if (data.userId == info.userId && data.userPassword == info.userPassword)
                     {
 
                         return RedirectToAction(nameof(ChangePW), new { data.Id });
@@ -335,6 +372,10 @@ namespace Register.Controllers
                         return View(info);
                     }
                 }
+           
+
         }
+
+
     }
 }
