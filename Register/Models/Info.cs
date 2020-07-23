@@ -14,17 +14,18 @@ namespace Register.Models
         [BindProperty]
         public int Id { get; set; }
         [StringLength(10, MinimumLength = 1)]
-        public string userId { get; set; }
+        public string UserId { get; set; }
 
-        
-        public string userName { get; set; }
+        [StringLength(10, MinimumLength = 1)]
+        public string UserName { get; set; }
       
         [StringLength(8, MinimumLength = 1)]
-        public string userPassword { get; set; }
+        public string UserPassword { get; set; }
         
-        public bool login { get; set; }
+        public bool isLogin { get; set; }
 
-        [Compare("userPassword")]
+        [Compare("UserPassword")]
+        [StringLength(8, MinimumLength = 1)]
         public string ConfirmPassword { get; set; }
     }
 }

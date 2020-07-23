@@ -7,8 +7,8 @@
 <h1>User Account</h1>
 
 <div>
-    <h6>@ViewBag.userId</h6>
-    @if (ViewBag.userId != null)
+    <h6>@ViewBag.UserId</h6>
+    @if (ViewBag.UserId != null)
     {
         <form method="post" asp-action="Logout">
             <input type="submit" value="Logout" class="btn btn-primary" />
@@ -16,33 +16,31 @@
     }
 </div>
 
-@if (ViewBag.userId != null)
+@if (ViewBag.UserId != null )
 {
-
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.userId)
+                    @Html.DisplayNameFor(model => model.UserId)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.userName)
+                    @Html.DisplayNameFor(model => model.UserName)
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-
             @foreach (var item in Model)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.userId)
+                        @Html.DisplayFor(modelItem => item.UserId)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.userName)
+                        @Html.DisplayFor(modelItem => item.UserName)
                     </td>
-                    @if (ViewBag.userId == item.userId)
+                    @if (ViewBag.userId == item.UserId && ViewBag.index == item.Id)
                     {
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
@@ -50,9 +48,7 @@
                     }
                 </tr>
             }
-
         </tbody>
-
     </table>
 }
 else
@@ -61,30 +57,26 @@ else
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.userId)
+                    @Html.DisplayNameFor(model => model.UserId)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.userName)
+                    @Html.DisplayNameFor(model => model.UserName)
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-
             @foreach (var item in Model)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.userId)
+                        @Html.DisplayFor(modelItem => item.UserId)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.userName)
+                        @Html.DisplayFor(modelItem => item.UserName)
                     </td>
-
                 </tr>
             }
-
         </tbody>
-
     </table>
 }
