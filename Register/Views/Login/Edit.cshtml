@@ -13,20 +13,20 @@
         <form asp-action="Edit">
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <input asp-for="UserId" class="form-control" />
-                <span asp-validation-for="UserId" class="text-danger"></span>
+                <label asp-for="userId" class="control-label"></label>
+                <input asp-for="userId" class="form-control" />
+                <span asp-validation-for="userId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label asp-for="userName" class="control-label"></label>
+                <input asp-for="userName" class="form-control" />
+                <span asp-validation-for="userName" class="text-danger"></span>
             </div>
             <div>
                 <a asp-action="Checking" asp-route-Id="@Model.Id">change pw</a>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
 
@@ -53,7 +53,7 @@
 {
     <script type="text/javascript">
         window.onload = function () {
-            alert("@ViewBag.ExiUser <-ID DUPLICATE");
+            alert("@ViewBag.exiUser <-ID DUPLICATE");
         };
     </script>
 }
